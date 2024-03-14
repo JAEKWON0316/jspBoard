@@ -1,12 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%> <!-- -->
-<%@ page import="java.sql.Connection"  %>  <!--  -->
+<%@ page import="java.sql.Connection , java.util.ArrayList, java.sql.Timestamp, jspBoard.dao.*, jspBoard.dto.BDto"  %>  <!--  -->
 <jsp:include page="inc/header.jsp" flush="true" />  
 <%@ include file="inc/aside.jsp" %>
 <jsp:useBean id="db" class="jspBoard.dao.DBConnect" scope="page" /> <!-- Bean으로 class를 불러오는 방법!! 이게 아니면 import후 new객체 생성 해줘야함-->
 <%
+  
+   String name = request.getParameter("searchform");
+
+ %> 
+
+<%
           Connection conn = db.conn;
-          System.out.println(conn); //출력이 잘 되는지 확인.
+          //System.out.println(conn); //출력이 잘 되는지 확인.
+          JBoardDao dao = new JBoardDao(conn);
+          ArrayList<BDto> list = dao.selectDB();
+       
+          
+          
+          
 %>
 
 
@@ -43,51 +55,44 @@
                         </thead>
                         <tbody>
                             <!-- loop -->
+                            <% 
+                               int num = list.size();
+                            
+                               for(int i = 0; i < list.size(); i++){ //List는 size가 크기임으로 이거로 for문을 돌리면서 값을 추출할 수 있다.
+                            	   BDto dto = list.get(i);
+                            	   int id = dto.getId();
+                            	   int depth = dto.getDepth();
+                            	   String title = dto.getTitle();
+                            	   String writer = dto.getWriter();
+                            	   int hit = dto.getHit();
+                            	   int chit = dto.getChit();
+                            	   Timestamp wdate = dto.getWdate();
+                            	   String styleDepth = "";
+                                   if(depth > 0){
+                                	   String padding = (depth*10)+"px";
+                                	   String reicon = "<i class=\"ri-corner-down-right-line\"></i>";
+                                	   styleDepth = "<span style='display:inline-block;width:" + padding + "'></span>"+reicon+" ";
+                                   }
+                            %>
                             <tr>
-                                <td class="text-center">1</td>
-                                <td><a href="">제목입니다. 이곳에 제목
-                                    제목입니다. 이곳에 제목
-                                    제목입니다. 이곳에 제목
-                                    제목입니다. 이곳에 제목
-                                    제목입니다. 이곳에 제목
-                                    </a><span>(2)</span>
+                                <td class="text-center"><%=num %></td>
+                                <td><a href="contents.jsp?id=<%=id%>">
+                                      <%=styleDepth%><%=title %>
+                                    </a><span></span>
                                     <i class="ri-file-image-fill"></i>
                                     <i class="ri-file-hwp-fill"></i>
                                     <i class="ri-file-music-fill"></i>
                                 </td>
 
-                                <td class="text-center">홍길동</td>
-                                <td class="text-center">12</td>
-                                <td class="text-center">2024.02.26</td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">1</td>
-                                <td><a href="#">제목입니다. 이곳에 제목<i class="ri-file-hwp-fill"></i></a></td>
-                                <td class="text-center">홍길동</td>
-                                <td class="text-center">12</td>
-                                <td class="text-center">2024.02.26</td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">1</td>
-                                <td><a href="#">제목입니다. 이곳에 제목<i class="ri-file-pdf-2-fill"></i></a></td>
-                                <td class="text-center">홍길동</td>
-                                <td class="text-center">12</td>
-                                <td class="text-center">2024.02.26</td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">1</td>
-                                <td><span class="re"></span><i class="ri-corner-down-right-line"></i><a href="#">제목입니다. 이곳에 제목</a></td>
-                                <td class="text-center">홍길동</td>
-                                <td class="text-center">12</td>
-                                <td class="text-center">2024.02.26</td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">1</td>
-                                <td><span class="re"></span><span class="re"></span><i class="ri-corner-down-right-line"></i></span><a href="#">제목입니다. 이곳에 제목</a></td>
-                                <td class="text-center">홍길동</td>
-                                <td class="text-center">12</td>
-                                <td class="text-center">2024.02.26</td>
-                            </tr>
+                                <td class="text-center"><%=writer %></td>
+                                <td class="text-center"><%=hit %></td>
+                                <td class="text-center"><%=wdate %></td>
+                            </tr>                
+                            <%
+                                num--;
+                               }
+                               
+                            %>
                             <!--/loop-->
                         </tbody>
                     </table>
@@ -128,8 +133,8 @@
                                             제목검색
                                           </button>
                                           <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="username">이름검색</a>
-                                            <a class="dropdown-item" href="title">제목검색</a>
+                                            <a class="dropdown-item" href="writer">이름검색</a>
+                                            <a class="dropdown-item"  href="title">제목검색</a>
                                             <a class="dropdown-item" href="content">내용검색</a>
                                           </div>
                                     </div>
@@ -142,4 +147,5 @@
                     <!--/listbox-->                        
                 </div>
             </section>
+          
     <%@ include file="inc/footer.jsp" %>     
