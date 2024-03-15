@@ -187,3 +187,11 @@ footer{
 .content-box{
 	min-height:250px;
 }
+/*** pass box ***/
+.pass-box{
+   width: 600px;
+   padding: 50px;
+   background:#ddd;
+   border-radius:10px;
+   margin: 30px auto;
+}

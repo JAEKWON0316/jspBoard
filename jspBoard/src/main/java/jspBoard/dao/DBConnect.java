@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBConnect {
        
-   public Connection conn = null;
+   public Connection conn = null; //필드 필드 초기화
    private String url = "jdbc:mysql://localhost:3306/javaboard";
    private String option = "?useUnicode=true&characterEncoding=utf-8"; //getter url주소 후에 ?키=값 해주는것
    private String user = "root";

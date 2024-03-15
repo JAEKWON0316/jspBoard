@@ -31,7 +31,7 @@
                         </div>
                         <!-- 게스트일 때만 적용 -->
                         <div class="col-12 text-center my-5">
-                            <a href="list.html" class="btn btn-danger px-5 mx-2">취소</a> <!--btn인 척 하는 a태그!!-->
+                            <a href="index.jsp" class="btn btn-danger px-5 mx-2">취소</a> <!--btn인 척 하는 a태그!!-->
                             <button class="btn btn-primary px-5 mx-2" type="submit">글쓰기</button>
                         </div>
                         <!-- 답글을 쓸 때 뿌려줘야 할 값들 -->

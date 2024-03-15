@@ -37,6 +37,7 @@
    Connection conn = db.conn;
    JBoardDao dao = new JBoardDao(conn);
    int rs = dao.insertDB(bDto);
+   
 
    //response.sendRedirect("index.jsp"); //페이지로 넘어가는것을 안에 있는페이지로 리다이렉트 해준다.
    
@@ -47,10 +48,23 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+
+
 <Script>
+<% if(rs == 1){%> 
    alert("글을 등록했습니다.");
-   location.href="./index.jsp";
+  location.href="./index.jsp"; 
+  <%} %>   
+ 
+   alert("에러가 발생했습니다.");
+  location.href="./write.jsp";
+
+
 </Script>
+ 
+ 
+
 </head>
 <body>
   <h1>데이터가 성공적으로 등록되었습니다.</h1>

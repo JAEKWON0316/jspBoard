@@ -1,23 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%> <!-- -->
-<%@ page import="java.sql.Connection , java.util.ArrayList, java.sql.Timestamp, jspBoard.dao.*, jspBoard.dto.BDto"  %>  <!--  -->
+<%@ page import="java.sql.Connection , java.util.ArrayList, java.sql.Timestamp, jspBoard.dao.*, jspBoard.dto.BDto, java.text.SimpleDateFormat"  %>  <!--  -->
 <jsp:include page="inc/header.jsp" flush="true" />  
 <%@ include file="inc/aside.jsp" %>
 <jsp:useBean id="db" class="jspBoard.dao.DBConnect" scope="page" /> <!-- Bean으로 class를 불러오는 방법!! 이게 아니면 import후 new객체 생성 해줘야함-->
-<%
-  
-   String name = request.getParameter("searchform");
 
- %> 
 
-<%
-          Connection conn = db.conn;
+<%        
+          
+          String st = request.getParameter("searchname");
+          String txt = request.getParameter("txt");
+       
+          Connection conn = db.conn; //DBConnect의 conn을 불러오는것 -> 성공했으면 이것만 해도 접속이 완료된다.
+
           //System.out.println(conn); //출력이 잘 되는지 확인.
           JBoardDao dao = new JBoardDao(conn);
-          ArrayList<BDto> list = dao.selectDB();
-       
+          ArrayList<BDto> list = null;
           
+          if(st == null || st.trim().isEmpty()){ //st에 값이 없으면
+        	  list = dao.selectDB(); //selectDB() 기본 메소드 실행
+          }
+          else{
+        	  list = dao.selectDB(st, txt);
+          }
           
+          SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd"); //날짜형식을 포맷 해주는 SimpleDateFormat 클래스
           
 %>
 
@@ -28,11 +35,10 @@
                     <h1 class="text-center mb-5">게시판</h1>
                     <div class="d-flex justify-content-between py-4 btn-box">
                         <div>
-                            <a href="#" class="btn btn-dark">최신글순</a>
-                            <a href="#" class="btn btn-white border-dark">인기글순</a>
+                            <label>총 게시글</label> : 000 / 000page
                         </div>
                         <div>
-                            <a href="#" class="btn btn-dark">목록</a>
+                            <a href="./" class="btn btn-dark">목록</a>
                             <a href="write.jsp" class="btn btn-white border-dark">글쓰기</a>
                         </div>
                     </div>
@@ -66,7 +72,8 @@
                             	   String writer = dto.getWriter();
                             	   int hit = dto.getHit();
                             	   int chit = dto.getChit();
-                            	   Timestamp wdate = dto.getWdate();
+                            	   Timestamp dates = dto.getWdate();
+                            	   String wdate = sdf.format(dates); //위에서 정한 방식으로 sdf.format(값); 해준다.
                             	   String styleDepth = "";
                                    if(depth > 0){
                                 	   String padding = (depth*10)+"px";
@@ -79,9 +86,11 @@
                                 <td><a href="contents.jsp?id=<%=id%>">
                                       <%=styleDepth%><%=title %>
                                     </a><span></span>
+                                    <!-- 
                                     <i class="ri-file-image-fill"></i>
                                     <i class="ri-file-hwp-fill"></i>
                                     <i class="ri-file-music-fill"></i>
+                                     -->
                                 </td>
 
                                 <td class="text-center"><%=writer %></td>
@@ -98,8 +107,8 @@
                     </table>
                     <div class="d-flex justify-content-between py-4 btn-box">
                         <div>
-                            <a href="#" class="btn btn-dark">최신글순</a>
-                            <a href="#" class="btn btn-white border-dark">인기글순</a>
+                            <a href="/jspboard" class="btn btn-dark">최신글순</a>
+                            <a href="/?sort=hit" class="btn btn-white border-dark">인기글순</a>
                         </div>
                         <ul class="paging">
                             <li>
@@ -123,29 +132,33 @@
                                 <a href="write.jsp" class="btn btn-white border-dark">글쓰기</a>
                             </div>
                         </div>
-                        <form name="searchform" id="searchform" class="searchform">
+                        <form  name="searchform" id="searchform" class="searchform" method="get"> <!-- 여기 페이지에서 get하겠다. -->
                                 <div class="input-group my-3">
                                     <div class="input-group-prepend">
-                                        <button type="button" 
+                                        <button type="submit" 
                                         class="btn btn-outline-secondary dropdown-toggle" 
-                                        data-toggle="dropdown"
+                                        data-toggle="dropdown"   
+                                        name="search"                                    
                                         value="title">
                                             제목검색
                                           </button>
+                                          <input type="hidden" name="searchname" id="searchname" value="title">                                      
                                           <div class="dropdown-menu">
                                             <a class="dropdown-item" href="writer">이름검색</a>
                                             <a class="dropdown-item"  href="title">제목검색</a>
                                             <a class="dropdown-item" href="content">내용검색</a>
                                           </div>
                                     </div>
-                                    <input type="search" class="form-control" placeholder="검색">
+                                                                                 
+                                    <input type="search" class="form-control" placeholder="검색" name="txt">
                                     <div class="input-group-append">
-                                        <button class="btn btn-primary"><i class="ri-search-line"></i></button>
+                                        <button type="submit" class="btn btn-primary"><i class="ri-search-line"></i></button>
                                     </div>
                                 </div>
                         </form>
+                      </div>
                     <!--/listbox-->                        
-                </div>
+               
             </section>
           
     <%@ include file="inc/footer.jsp" %>     

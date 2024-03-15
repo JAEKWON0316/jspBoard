@@ -6,15 +6,20 @@ $(function(){
         let $txt = $(this).text();
         $('.dropdown-toggle').text($txt);
         $('.dropdown-toggle').val($val);
-        console.log($val, $txt);
+        $('#searchname').val($val);
+        
     });
     
     $('#zip').click(function(){
         dPostcode();
     });
 
-
-      
+    $("#passform").submit(function(){
+         if($("#cpass").val() == ""){
+             alert("비밀번호를 입력하세요.");
+             return false;
+         }
+    });  
 
 }); //jquery
 
