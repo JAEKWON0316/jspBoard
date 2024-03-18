@@ -62,7 +62,7 @@
          
           <div class="my-5 pt-5 text-right">
              <a href="#" class="btn btn-primary mr-3">목록</a>
-             <a href="rewrite.jsp?id=<%=id %>" class="btn btn-primary">답글쓰기</a>
+             <a href="rewrite.jsp?id=<%=id %>&refid=<%=rs.getRefid() %>&depth=<%=rs.getDepth() %>&renum=<%=rs.getRenum() %>" class="btn btn-primary">답글쓰기</a>
              <a href="pass.jsp?id=<%=id %>&mode=edit" class="btn btn-primary">수정</a> <!-- 매개변수로 2개를 보내주는 방법(getter) -->
              <a href="pass.jsp?id=<%=id %>&mode=del" class="btn btn-danger">삭제</a>
           </div>

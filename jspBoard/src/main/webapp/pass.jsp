@@ -29,6 +29,7 @@
                <button type="submit" class="btn btn-success px-4 ml-2"><%=modeText %></button>
                </div>
                <input type="hidden" name="mode" value="<%=mode %>" />
+               <input type="hidden" name="id" value="<%=id %>" />
              </form>
           </div>
          

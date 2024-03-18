@@ -36,6 +36,14 @@
    
    Connection conn = db.conn;
    JBoardDao dao = new JBoardDao(conn);
+   if(bDto.getDepth() > 0 ){
+	   bDto.setRefid(bDto.getRefid()); //순서를 맞춰주기 위해 답글의 답글을 달 때는 id값이 아니라 refid값을 넘겨준다.    
+   }
+   else{
+	   bDto.setRefid(bDto.getId());   
+   }  
+   bDto.setDepth(bDto.getDepth()+1);
+   bDto.setRenum(bDto.getRenum());
    int rs = dao.insertDB(bDto);
    
 

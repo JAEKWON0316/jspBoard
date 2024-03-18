@@ -214,26 +214,37 @@ public class JBoardDao {
 	  //쓰기
 	  public int insertDB(BDto dto) {
 		  int num = 0;
-		  String sql ="insert into jboard (title, content, writer, pass, userid) values (?, ?, ?, ?, ?)";
+		  String sql ="insert into jboard (depth, title, content, writer, pass, userid) values (?, ?, ?, ?, ?, ?)";
 		  try {
 			  pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); //입력할 때 프라이머리키 값 반환하는 법(id값을 모를 때 써줘야 id값을 뽑아올 수 있다!!!)
 			                                       //지금 등록한 ID값에 대하여 받아오겠다!!
-			  pstmt.setString(1, dto.getTitle());
-			  pstmt.setString(2, dto.getContent());
-			  pstmt.setString(3, dto.getWriter());
-			  pstmt.setString(4, dto.getPass());
+			  pstmt.setInt(1, dto.getDepth());
+			  pstmt.setString(2, dto.getTitle());
+			  pstmt.setString(3, dto.getContent());
+			  pstmt.setString(4, dto.getWriter());
+			  pstmt.setString(5, dto.getPass());
 			  if(dto.getUserid()!=null) {
-				  pstmt.setString(5, dto.getUserid());
+				  pstmt.setString(6, dto.getUserid());
 			  }
 			  else {
-				  pstmt.setString(5, "GUEST");
+				  pstmt.setString(6, "GUEST");
 			  }
 			  pstmt.executeUpdate();
 			  res = pstmt.getGeneratedKeys(); //입력 후 auto increment 값을 반환 받음.
 			  if(res.next()) {
 				  num = res.getInt(1);
-				  updateDB(num, num, "refid"); //refid 업데이트 매개변수로 넘겨줌
 			  }
+			  
+			  if(dto.getDepth() > 0 ) {
+				  updateDB(dto.getRefid(), dto.getRenum()); //입력한 수 보다 큰 숫자를 1씩 증가시킴
+				  updateDB(num, dto.getRefid(), "refid"); //새로 번호를 입력 (수정중 renum도 증가시켜 넣어 줘야함)
+			  }
+			  else {			 
+				  
+		         updateDB(num, num, "refid"); //refid 업데이트 매개변수로 넘겨줌
+				     
+			  }
+			
 			 
 		  }
 		  catch(SQLException e) {
@@ -268,17 +279,19 @@ public class JBoardDao {
 		
 		  return rs;
 	  }
+	  
 	  //업데이트DB 오버로드
 	  public int updateDB(BDto dto) {
 		  int rs = 0;
-		  String sql = "update jboard set writer =? , title =?, content=? where id=?"; //column만 변수로 받음
+		  String sql = "update jboard set writer =? , pass = ?, title =?, content=? where id=?"; //column만 변수로 받음
 		  
 		  try {
 			pstmt = conn.prepareStatement(sql);	
 			pstmt.setString(1, dto.getWriter());
-			pstmt.setString(2, dto.getTitle());
-			pstmt.setString(3, dto.getContent());
-			pstmt.setInt(4, dto.getId());
+			pstmt.setString(2, dto.getPass());
+			pstmt.setString(3, dto.getTitle());
+			pstmt.setString(4, dto.getContent());
+			pstmt.setInt(5, dto.getId());
 			rs = pstmt.executeUpdate(); //executeUpdate의 리턴값은 int형 성공1 실패 0 -> update insert delete 때 사용.
 		} catch (SQLException e) {
 			
@@ -296,5 +309,86 @@ public class JBoardDao {
 		
 		  return rs;
 	  }
+	  
+	  //글 번호증가 업데이트
+	  public int updateDB(int refid, int renum) {
+		  int rs = 0;
+		  String sql = "update jboard set renum = renum + 1 where refid=? and renum > ? ";
+		  try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, refid);
+			pstmt.setInt(2, renum);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		  finally {
+			  try {
+				  if(pstmt != null) pstmt.close();
+				
+			  }
+			  catch(SQLException e) {
+				  e.printStackTrace();
+			  }
+		  }
+		
+		  return rs;	
+			
+	  }
+	  
+	  //비번검증
+	   public int findPass(String id, String pass) {
+	      int nid = Integer.parseInt(id);
+	      int result = 0;
+	      
+	      String sql = "select id from jboard where id=? and pass=?";
+	              BDto bDto = new BDto();
+	              try {
+	                 pstmt = conn.prepareStatement(sql);
+	                 pstmt.setInt(1, nid);
+	                 pstmt.setString(2, pass);
+	                 res = pstmt.executeQuery();
+	                 if(res.next()) {
+	                    result = 1;
+	                 }        
+	   }catch (SQLException e) {
+	       e.printStackTrace();
+	    } finally {
+	        try {
+	            if(res != null) res.close();
+	            if(pstmt != null) pstmt.close();
+	         }catch(SQLException e) {e.printStackTrace();}   
+	      }
+	     
+	                
+	      return result;
+	   }
+	    
+	   
+	   //삭제
+	   public int deleteDB(String id, String pass) {
+	      int nid = Integer.parseInt(id);
+	      int result = 0;
+	      String sql = "delete from jboard where id=? and pass=?";
+	       BDto bDto = new BDto();
+	         try {
+	            pstmt = conn.prepareStatement(sql);
+	      pstmt.setInt(1, nid);
+	      pstmt.setString(2, pass);
+	      result = pstmt.executeUpdate();
+	      return result;
+	         
+	   }catch (SQLException e) {
+	       e.printStackTrace();
+	    } finally {
+	        try {
+	            if(res != null) res.close();
+	            if(pstmt != null) pstmt.close();
+	         }catch(SQLException e) {e.printStackTrace();}   
+	      }
+	     
+	                
+	      return result;
+	   }
 	  
 }
