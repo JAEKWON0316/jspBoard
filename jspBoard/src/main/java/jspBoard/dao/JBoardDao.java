@@ -32,7 +32,7 @@ public class JBoardDao {
 		  try {
 		  pstmt = conn.prepareStatement(sql); //Connection 안에 있는 prepareStatement 메소드에 값을 넣어줘야지 PreparedStatement 타입으로 바뀐다.
 		  pstmt.setInt(1, 0); // 변수 ? 순서대로 1,2,3 ... 이렇게 간다. 순서, 값 식으로
-		  pstmt.setInt(2, 20);
+		  pstmt.setInt(2, 60);
 		  res = pstmt.executeQuery();
 		  //"select * from jboard order by refid desc, renum asc limit 0, 20"; 이런 쿼리문을 res에 넣겠다.
 		  
@@ -235,33 +235,70 @@ public class JBoardDao {
 				  num = res.getInt(1);
 			  }
 			  
-			  if(dto.getDepth() > 0 ) {
-				  updateDB(dto.getRefid(), dto.getRenum()); //입력한 수 보다 큰 숫자를 1씩 증가시킴
-				  updateDB(num, dto.getRefid(), "refid"); //새로 번호를 입력 (수정중 renum도 증가시켜 넣어 줘야함)
+			  if(dto.getDepth() == 0 ) {
+				  
+				  updateDB(num, num, "refid"); //refid 업데이트 매개변수로 넘겨줌
+				 
 			  }
+			  
 			  else {			 
 				  
-		         updateDB(num, num, "refid"); //refid 업데이트 매개변수로 넘겨줌
+				  updateDB(dto.getRefid(), dto.getRenum()); //입력한 수 보다 큰 숫자를 1씩 증가시킴
+				  updateDB(num, dto.getRefid(), dto.getRenum()+1); //새로 번호를 입력 (수정중 renum도 증가시켜 넣어 줘야함)
 				     
 			  }
 			
 			 
-		  }
-		  catch(SQLException e) {
-			  e.printStackTrace();
-		  }
-		  return num;
-	  }
+		  }catch(SQLException e) {
+	          e.printStackTrace();
+	       }finally {
+	          try {
+	               if(res != null) res.close();
+	               if(pstmt != null) pstmt.close();
+	            }catch(SQLException e) {e.printStackTrace();}   
+	         }
+	       return num;
+	    }
+
+	  
 	  
 	  //업데이트
 	  public int updateDB(int id, int num, String column) {
 		  int rs = 0;
-		  String sql = "update jboard set " + column + "=? where id=?"; //column만 변수로 받음
+		  String sql =  "update jboard set "+ column +"=? where id=?";  //column만 변수로 받음
 		  
 		  try {
 			pstmt = conn.prepareStatement(sql);	
 			pstmt.setInt(1, num);
 			pstmt.setInt(2, id);
+			rs = pstmt.executeUpdate(); //executeUpdate의 리턴값은 int형 성공1 실패 0 -> update insert delete 때 사용.
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		  finally {
+			  try {
+				  if(pstmt != null) pstmt.close();
+				
+			  }
+			  catch(SQLException e) {
+				  e.printStackTrace();
+			  }
+		  }
+		
+		  return rs;
+	  }
+	  
+	  //업데이트 오버로드
+	  public int updateDB(int id, int num, int renum) {
+		  int rs = 0;
+		  String sql =  "update jboard set refid =? , renum = ? where id=?"; //column만 변수로 받음
+		  
+		  try {
+			pstmt = conn.prepareStatement(sql);	
+			pstmt.setInt(1, num);
+			pstmt.setInt(2, renum);
+			pstmt.setInt(3, id);
 			rs = pstmt.executeUpdate(); //executeUpdate의 리턴값은 int형 성공1 실패 0 -> update insert delete 때 사용.
 		} catch (SQLException e) {
 			
@@ -318,6 +355,7 @@ public class JBoardDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, refid);
 			pstmt.setInt(2, renum);
+		    rs = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -335,8 +373,9 @@ public class JBoardDao {
 		  return rs;	
 			
 	  }
+	   
 	  
-	  //비번검증
+      //비번검증
 	   public int findPass(String id, String pass) {
 	      int nid = Integer.parseInt(id);
 	      int result = 0;

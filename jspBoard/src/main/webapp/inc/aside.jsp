@@ -12,7 +12,7 @@
                  <label> 아이디 기억 <input type="checkbox" name="rid" value="rid" id="rid"></label>
                </div>         
                <button type="submit" class="btn btn-dark btn-block">로그인</button>                     
-               <a href="join.html">회원가입</a>
+               <a href="join.jsp">회원가입</a>
             </form>    
          </aside>
          <!--/ ASIDE-->

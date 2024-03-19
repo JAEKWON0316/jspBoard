@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%> <!-- -->
+    pageEncoding="UTF-8" isELIgnored="true"%> <!-- -->
 <%@ page import="java.sql.Connection , java.util.ArrayList, java.sql.Timestamp, jspBoard.dao.*, jspBoard.dto.BDto, java.text.SimpleDateFormat"  %>  <!--  -->
 <jsp:include page="inc/header.jsp" flush="true" />  
 <%@ include file="inc/aside.jsp" %>
@@ -25,7 +25,7 @@
           }
           
           SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd"); //날짜형식을 포맷 해주는 SimpleDateFormat 클래스
-          
+  
 %>
 
 
