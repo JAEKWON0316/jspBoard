@@ -39,7 +39,7 @@ function dPostcode() {
           <h1 class="text-center mb-5">회원가입</h1>
           <p class="text-center text-danger">* 표시가 되어 있는 부분은 필수 항목입니다.</p>
        
-                     <form name="registerForm" id="registerform" class="registerform" method="post">
+                     <form name="registerForm" action= "joinok.jsp" id="registerform" class="registerform" method="post">
                     <div class="row">
                         <div class="col-5 d-flex align-items-center mb-4">
                             <label for="username" class="text-right mr-3 col-4">이름*</label>
@@ -48,7 +48,7 @@ function dPostcode() {
                         </div>
                         <div class="col-5 d-flex align-items-center mb-4">
                             <label for="uid" class="text-right mr-3 col-4">아이디*</label>
-                            <input type="text" name="fuserid" id="fuserid" 
+                            <input type="text" name="userid" id="userid" 
                                    class="form-control col-8" placeholder="아이디" />
                         </div>
                         <div class="col-2 mb-4"></div>
@@ -56,12 +56,12 @@ function dPostcode() {
 
                         <div class="col-5 d-flex align-items-center mb-4">
                             <label for="upass" class="text-right mr-3 col-4">비밀번호*</label>
-                            <input type="password" name="fuserpass" id="fuserpass"
+                            <input type="password" name="userpass" id="userpass"
                                    class="form-control col-8" placeholder="비밀번호">
                         </div>
                         <div class="col-5 d-flex align-items-center mb-4">
                             <label for="repassword" class="text-right mr-3 col-4">비밀번호 확인</label>
-                            <input type="password" name="freuserpass" id="freuserpass"
+                            <input type="password" name="reuserpass" id="reuserpass"
                                    class="form-control col-8" placeholder="비밀번호확인">
                         </div>
                         <div class="col-2 mb-4"></div>
@@ -77,12 +77,9 @@ function dPostcode() {
                         
                         <div class="col-8 d-flex align-items-center mb-4">
                           <label for="tel1" class="text-right mr-3 col-3">전화번호*</label>
-                          <input type="number" name="tel1" id="tel1"
-                                 class="form-control col-3 mr-2" placeholder="010"> 
-                          - <input type="number" name="tel2" id="tel2"
-                                 class="form-control col-3 mx-2" placeholder="0000">                                  
-                          - <input type="number" name="tel3" id="tel3"
-                                 class="form-control col-3 mx-2" placeholder="0000"> 
+                          <input type="text" name="usertel" id="usertel"
+                                 class="form-control col-8 mr-2" placeholder="010"
+                                 oninput ="autoHypen(this)" maxlength="13">            
                         </div>
                         <div class="col-4"></div>
 
@@ -116,6 +113,7 @@ function dPostcode() {
                             <button class="btn btn-danger px-5 mx-2" type="reset">취소</button>
                             <button class="btn btn-primary px-5 mx-2" type="submit">전송</button>
                         </div>
+                        <input type="hidden" name="address" id="address" /> <!-- 나눠진값 이어주기 위한 hidden 타입 -->
                     </div>
                 </form>
        

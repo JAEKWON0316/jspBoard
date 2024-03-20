@@ -23,8 +23,8 @@ public class MembersDao {
 		int num = 0;
 	
 		String sql = "insert into members " 
-		             + "(userid, userpass, username, useremail, usertel, address, userlink)"
-				     + "values(?, ?, ?, ?, ?, ?, ?)";
+		             + "(userid, userpass, username, useremail, usertel, zipcode, addr1, addr2, userlink)"
+				     + "values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getUserid());
@@ -32,8 +32,10 @@ public class MembersDao {
 			pstmt.setString(3, dto.getUsername());
 			pstmt.setString(4, dto.getUseremail());
 			pstmt.setString(5, dto.getUsertel());
-			pstmt.setString(6, dto.getAddress());
-			pstmt.setString(7, dto.getUserlink());
+			pstmt.setInt(6, dto.getZipcode());
+			pstmt.setString(7, dto.getAddr1());
+			pstmt.setString(8, dto.getAddr2());
+			pstmt.setString(9, dto.getUserlink());
 			num = pstmt.executeUpdate();
 			
 		}catch(SQLException e) {
@@ -46,6 +48,31 @@ public class MembersDao {
 				}	
 		}					
 		return num;
+	}
+	
+	//회원 중복 검증
+	public boolean findUser(String column, String uname) {
+		boolean res = true;
+		String sql = "select * from members where "+ column + " = ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, uname);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				res = false;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				if(pstmt != null) pstmt.close();
+			} catch (SQLException e) {	
+				e.printStackTrace();
+			}	
+	    }					
+		System.out.println(res);
+		return res;
 	}
 	
 }
