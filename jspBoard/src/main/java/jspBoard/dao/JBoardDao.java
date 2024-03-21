@@ -32,7 +32,7 @@ public class JBoardDao {
 		  try {
 		  pstmt = conn.prepareStatement(sql); //Connection 안에 있는 prepareStatement 메소드에 값을 넣어줘야지 PreparedStatement 타입으로 바뀐다.
 		  pstmt.setInt(1, 0); // 변수 ? 순서대로 1,2,3 ... 이렇게 간다. 순서, 값 식으로
-		  pstmt.setInt(2, 60);
+		  pstmt.setInt(2, 20);
 		  res = pstmt.executeQuery();
 		  //"select * from jboard order by refid desc, renum asc limit 0, 20"; 이런 쿼리문을 res에 넣겠다.
 		  
