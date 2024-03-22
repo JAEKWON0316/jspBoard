@@ -10,6 +10,9 @@
    SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 hh시 mm분 ss초");
    
    String id = request.getParameter("id");
+   String cpg = request.getParameter("cpg");
+   if(cpg == null) cpg = "1";
+   
    DBConnect db = new DBConnect(); //db접속
    Connection conn = db.conn;
    JBoardDao dao = new JBoardDao(conn); //viewDB()메소드를 쓰기위해 dao 객체 생성
@@ -61,8 +64,8 @@
           </div>
          
           <div class="my-5 pt-5 text-right">
-             <a href="#" class="btn btn-primary mr-3">목록</a>
-             <a href="rewrite.jsp?id=<%=id %>&refid=<%=rs.getRefid() %>&depth=<%=rs.getDepth() %>&renum=<%=rs.getRenum() %>" class="btn btn-primary">답글쓰기</a>
+             <a href="./?cpg=<%=cpg %>" class="btn btn-primary mr-3">목록</a>
+             <a href="rewrite.jsp?id=<%=id %>&refid=<%=rs.getRefid() %>&depth=<%=rs.getDepth() %>&renum=<%=rs.getRenum() %>&cpg=<%=cpg %>" class="btn btn-primary">답글쓰기</a>
              <a href="pass.jsp?id=<%=id %>&mode=edit" class="btn btn-primary">수정</a> <!-- 매개변수로 2개를 보내주는 방법(getter) -->
              <a href="pass.jsp?id=<%=id %>&mode=del" class="btn btn-danger">삭제</a>
           </div>

@@ -14,6 +14,7 @@ import jspBoard.dto.BDto;
 public class JBoardDao {
     
 	  PreparedStatement pstmt = null; //쿼리문에 ? 변수가 있으면 PreparedStatement 아니면 변수가 없으면 그냥 Statement
+	  Statement stmt = null;
 	  ResultSet res = null; //sql 받을 때 preparedStatement로 받은것을 읽는 클래스
 	  Connection conn;
 	  
@@ -21,8 +22,65 @@ public class JBoardDao {
 		  this.conn = conn; //위에 만들어놓은 conn에 값을 넣어주는것 JBoardDao dao = new JBoardDao(conn); 를하면 바로 연결가능 생성자를 통해
 	  }
 	  
+	  //전체 게시글 수 select
+	  public int AllselectDB() {
+		  int rs = 0;
+          String sql = "select count(*) from jboard";
+       
+          
+          try {
+        	stmt = conn.createStatement();
+        	res = stmt.executeQuery(sql);
+        	if(res.next()) {
+        		 rs = res.getInt(1); //rs = res.getInt("count(*)");
+        	}
+          } catch(SQLException e) {
+			  e.printStackTrace();
+		  }
+		  finally {
+			  try {
+				  if(res != null) res.close();
+				  if(pstmt != null) stmt.close();
+				
+			  }
+			  catch(SQLException e) {
+				  e.printStackTrace();
+			  }
+		  }
+          return rs;
+      }
+	  
+	//전체 게시글 수 select 오버로드
+	  public int AllselectDB(String st, String txt) {
+		  int rs = 0;
+          String sql = "select count(*) from jboard where " + st + " like ?";
+       
+          
+          try {
+        	
+        	res = stmt.executeQuery(sql);
+        	pstmt.setString(1, "%"+txt+"%");
+        	if(res.next()) {
+        		 rs = res.getInt(1); //rs = res.getInt("count(*)");
+        	}
+          } catch(SQLException e) {
+			  e.printStackTrace();
+		  }
+		  finally {
+			  try {
+				  if(res != null) res.close();
+				  if(pstmt != null) stmt.close();
+				
+			  }
+			  catch(SQLException e) {
+				  e.printStackTrace();
+			  }
+		  }
+          return rs;
+      }
+	  
 	  //select
-	  public ArrayList<BDto> selectDB(){ //select한것을 DBto에 집어넣는것 lesson20의 JBoardDao와 반대이다!
+	  public ArrayList<BDto> selectDB(int limitPage, int listCount){ //select한것을 DBto에 집어넣는것 lesson20의 JBoardDao와 반대이다!
 		  
 		  ArrayList<BDto> dtos = new ArrayList<>(); //값을 담을 ArrayList객체 생성 
 		                                            //왜? 저렇게 while문을 돌면 마지막 값만 담기기에 이렇게 List에 담아줘서 모든 정보를 뽑아낼 수 있도록 하기위함.
@@ -31,8 +89,8 @@ public class JBoardDao {
 				       +" limit ?, ?";
 		  try {
 		  pstmt = conn.prepareStatement(sql); //Connection 안에 있는 prepareStatement 메소드에 값을 넣어줘야지 PreparedStatement 타입으로 바뀐다.
-		  pstmt.setInt(1, 0); // 변수 ? 순서대로 1,2,3 ... 이렇게 간다. 순서, 값 식으로
-		  pstmt.setInt(2, 20);
+		  pstmt.setInt(1, limitPage); // 변수 ? 순서대로 1,2,3 ... 이렇게 간다. 순서, 값 식으로
+		  pstmt.setInt(2, listCount);
 		  res = pstmt.executeQuery();
 		  //"select * from jboard order by refid desc, renum asc limit 0, 20"; 이런 쿼리문을 res에 넣겠다.
 		  
@@ -85,7 +143,7 @@ public class JBoardDao {
 	  }
 	  
 	  //오버로드
-	  public ArrayList<BDto> selectDB(String st, String txt){  //st는 컬럼명 txt는 검색내용
+	  public ArrayList<BDto> selectDB(int limitPage, int listCount, String st, String txt){  //st는 컬럼명 txt는 검색내용
 		  
 		     ArrayList<BDto> dtos = new ArrayList<>();
 		     String sql = "select * from jboard where " + st + " like ? order by refid desc, renum asc" //sql ?에 String으로 데이터를 입력하면 ''따옴표가 들어가기 때문에 변수로 써준다.
@@ -95,8 +153,8 @@ public class JBoardDao {
 			  pstmt = conn.prepareStatement(sql);
 			
 			  pstmt.setString(1, "%"+txt+"%");
-			  pstmt.setInt(2, 0); 
-			  pstmt.setInt(3, 20);
+			  pstmt.setInt(2, limitPage); 
+			  pstmt.setInt(3, listCount);
 			  System.out.println(pstmt);
 			  res = pstmt.executeQuery();
 			//왜? 저렇게 while문을 돌면 마지막 값만 담기기에 이렇게 List에 담아줘서 모든 정보를 뽑아낼 수 있도록 하기위함.

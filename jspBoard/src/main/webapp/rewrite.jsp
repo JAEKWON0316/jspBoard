@@ -9,6 +9,7 @@
    String refid = request.getParameter("refid");
    String depth = request.getParameter("depth");
    String renum = request.getParameter("renum"); //답글에게 넘겨줄 정보들
+   String cpg = request.getParameter("cpg");
 %>
          <section>
                 <div class="write">
@@ -44,6 +45,7 @@
                         <input type="hidden" name="refid" value="<%=refid %>" />
                         <input type="hidden" name="depth" value="<%=depth %>" />
                         <input type="hidden" name="renum" value="<%=renum %>" />
+                        <input type="hidden" name="cpg" value="<%=cpg %>" />
                     </form>
                 </div>
         </section>
