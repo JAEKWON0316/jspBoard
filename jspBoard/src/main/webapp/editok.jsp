@@ -9,9 +9,10 @@
 <%
 
    String id = request.getParameter("id");
-   Connection conn = db.conn;
+   Connection conn = db.getConnection();
    JBoardDao dao = new JBoardDao(conn);
    int rs = dao.updateDB(bDto);
+   db.closeConnection();
     //Bean을 안 썻을 시!! (위에 import에 jspBoard.dto.BDto를 해주고 난 후 ! )
     //getParameter로 name에 대한 value를 뽑아온후
     //String writer = request.getParameter("wrtier");

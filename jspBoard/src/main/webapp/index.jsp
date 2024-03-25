@@ -4,14 +4,14 @@
 <jsp:include page="inc/header.jsp" flush="true" />  
 <%@ include file="inc/aside.jsp" %>
 <jsp:useBean id="db" class="jspBoard.dao.DBConnect" scope="page" /> <!-- Bean으로 class를 불러오는 방법!! 이게 아니면 import후 new객체 생성 해줘야함-->
-
+<!-- useBean으로 생성자 만듦 -->
 
 <%        
           
           String st = request.getParameter("searchname"); //검색엔진
           String txt = request.getParameter("txt"); //검색엔진
        
-          Connection conn = db.conn; //DBConnect의 conn을 불러오는것 -> 성공했으면 이것만 해도 접속이 완료된다.
+          Connection conn = db.getConnection(); //DBConnect의 conn을 불러오는것 -> 성공했으면 이것만 해도 접속이 완료된다.
 
           //System.out.println(conn); //출력이 잘 되는지 확인.
           JBoardDao dao = new JBoardDao(conn);
@@ -59,7 +59,7 @@
           else{
         	  list = dao.selectDB(limitPage, listCount, st, txt);
           }
-          
+          db.closeConnection();
           SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd"); //날짜형식을 포맷 해주는 SimpleDateFormat 클래스
           NumberFormat formatter = NumberFormat.getInstance(); //getInstance()란 메소드로 객체화 NumberForamt을 ==> 세자리수 콤마가 생김!!
 %>

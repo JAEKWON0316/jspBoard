@@ -6,9 +6,10 @@
    String id = request.getParameter("id");
    String cpass = request.getParameter("cpass");
    String mode = request.getParameter("mode");
-   Connection conn = db.conn;
+   Connection conn = db.getConnection();
    JBoardDao dao = new JBoardDao(conn);
    int result = dao.findPass(id, cpass);
+   db.closeConnection();
 %>
 <!DOCTYPE html>
 <html>

@@ -9,7 +9,7 @@
 <%
     
    String cpg = request.getParameter("cpg");
-   Connection conn = db.conn;
+   Connection conn = db.getConnection();
    JBoardDao dao = new JBoardDao(conn);
    if(bDto.getDepth() > 0 ){
 	   bDto.setRefid(bDto.getRefid()); //순서를 맞춰주기 위해 답글의 답글을 달 때는 id값이 아니라 refid값을 넘겨준다.    
@@ -21,6 +21,7 @@
    bDto.setRenum(bDto.getRenum());
    int rs = dao.insertDB(bDto);
    
+   db.closeConnection();
 
    //response.sendRedirect("index.jsp"); //페이지로 넘어가는것을 안에 있는페이지로 리다이렉트 해준다.
    

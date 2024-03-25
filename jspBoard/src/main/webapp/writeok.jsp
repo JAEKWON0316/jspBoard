@@ -34,9 +34,10 @@
    //pstmt.close();
    //conn.close();
    
-   Connection conn = db.conn;
+   Connection conn = db.getConnection();
    JBoardDao dao = new JBoardDao(conn);
    int rs = dao.insertDB(bDto);
+   db.closeConnection();
    
 
    //response.sendRedirect("index.jsp"); //페이지로 넘어가는것을 안에 있는페이지로 리다이렉트 해준다.

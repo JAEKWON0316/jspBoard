@@ -14,7 +14,7 @@
    if(cpg == null) cpg = "1";
    
    DBConnect db = new DBConnect(); //db접속
-   Connection conn = db.conn;
+   Connection conn = db.getConnection();
    JBoardDao dao = new JBoardDao(conn); //viewDB()메소드를 쓰기위해 dao 객체 생성
    BDto dto = new BDto(); //viewDB 리턴 타입인 dto를 받기 위해 dto 객체 생성
    BDto rs = dao.viewDB(id);
@@ -39,6 +39,7 @@
     }
     
     String wdate = sdf.format(rs.getWdate());
+    db.closeConnection();
 %>
 
 

@@ -9,12 +9,12 @@
 <%
     
  
-   Connection conn = db.conn;
+   Connection conn = db.getConnection();
    MembersDao dao = new MembersDao(conn);
 
    int rs = dao.insertDB(mDto);
    
-
+   db.closeConnection();
    //response.sendRedirect("index.jsp"); //페이지로 넘어가는것을 안에 있는페이지로 리다이렉트 해준다.
    
 

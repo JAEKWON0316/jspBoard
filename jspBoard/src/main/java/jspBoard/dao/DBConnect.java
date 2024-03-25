@@ -1,30 +1,46 @@
 package jspBoard.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 public class DBConnect {
-       
-   public Connection conn = null; //필드 필드 초기화
-   private String url = "jdbc:mysql://localhost:3306/javaboard";
-   private String option = "?useUnicode=true&characterEncoding=utf-8"; //getter url주소 후에 ?키=값 해주는것
-   private String user = "root";
-   private String pass = "diwo0206^";
+   public Connection conn = null;
+   private InitialContext initContext;
    
-   public DBConnect() { //생성자 DBConnect가 생성되면 안에 내용이 실행되고 필드로 Connection conn을 뱉는다.
-	   try {
-	   Class.forName("com.mysql.cj.jdbc.Driver");
-	   try {
-		this.conn = DriverManager.getConnection(url+option, user, pass); //this -> 여기 위에 있는 conn 필드에 값을 넣겠다.
+   public DBConnect() { //기본생성자
+   
+   }
+   
+   //커넥션 하는 메소드
+   public Connection getConnection() throws SQLException, NamingException { //생성자 DBConnect가 생성되면 안에 내용이 실행되고 필드로 Connection conn을 뱉는다.
+	    if(conn == null || conn.isClosed()) {
+		initContext = new InitialContext(); //JNDI 컨텍스트 초기화.
+		DataSource ds = (DataSource) initContext.lookup("java:/comp/env/jdbc/javaboard"); 
+		//JNDI에서 이름을 찾아옴. "java:/comp/env/"
+		conn = ds.getConnection();
 		System.out.println("db접속 성공");
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+		
+	    }
+        return conn;
+   }
+   
+   //커넥션 닫는 메소드
+   public void closeConnection() {
+	   try {
+		   if(conn != null && !conn.isClosed()) {
+			   conn.close();
+			   System.out.println("db를 닫았습니다.");
+		   }
 	   }
-	   catch(ClassNotFoundException e) {
-		   e.printStackTrace();
+	   catch(SQLException e){
+		    e.printStackTrace();
+	   }
+	   finally {
+		   conn = null;
 	   }
    }
 }
