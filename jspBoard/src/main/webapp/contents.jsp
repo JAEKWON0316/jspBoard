@@ -4,9 +4,9 @@
 <%@ include file="inc/header.jsp" %>
 <%@ include file="inc/aside.jsp" %> 
 <% 
-   Cookie[] cookies = request.getCookies(); //쿠키배열로 쿠키를 get해온다.
-   
-   
+   HttpSession sess2 = request.getSession(true);
+   Cookie[] cooks2 = request.getCookies();  //웹브라우저에 저장된 모든 쿠키를 받는다.   
+
    SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 hh시 mm분 ss초");
    
    String id = request.getParameter("id");
@@ -21,8 +21,8 @@
    
    Boolean addCook = true;
     //cid라는 쿠키이름을 생성하고 id값을 넣어준다.
-   if((cookies != null) && (cookies.length > 0)){ //쿠키가 null이 아니거다 쿠키가 있다면!
-	   for(Cookie cook:cookies){
+   if((cooks2 != null) && (cooks2.length > 0)){ //쿠키가 null이 아니거다 쿠키가 있다면!
+	   for(Cookie cook:cooks2){
 		   if(cook.getName().equals("cid") && cook.getValue().equals(id)){
 			      addCook = false;
 		   }

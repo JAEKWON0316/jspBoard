@@ -15,7 +15,7 @@ public class MDto {
     private String userlink;
     private String role;
     private Timestamp wdate;
-    private int Zipcode;
+    private int zipcode;
  
     
     //생성자 생성
@@ -38,7 +38,7 @@ public class MDto {
 		this.userlink = userlink;
 		this.role = role;
 		this.wdate = wdate;
-		Zipcode = zipcode;
+		this.zipcode = zipcode;
 	}
 
 
@@ -153,12 +153,12 @@ public class MDto {
 
 
 	public int getZipcode() {
-		return Zipcode;
+		return zipcode;
 	}
 
 
 	public void setZipcode(int zipcode) {
-		Zipcode = zipcode;
+		this.zipcode = zipcode;
 	}
 
 
@@ -166,7 +166,7 @@ public class MDto {
 	public String toString() {
 		return "MDto [id=" + id + ", userid=" + userid + ", userpass=" + userpass + ", username=" + username
 				+ ", useremail=" + useremail + ", usertel=" + usertel + ", addr1=" + addr1 + ", addr2=" + addr2
-				+ ", userlink=" + userlink + ", role=" + role + ", wdate=" + wdate + ", Zipcode=" + Zipcode + "]";
+				+ ", userlink=" + userlink + ", role=" + role + ", wdate=" + wdate + ", zipcode=" + zipcode + "]";
 	}
     
     

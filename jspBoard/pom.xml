@@ -26,5 +26,11 @@
              <artifactId>mysql-connector-j</artifactId>
              <version>8.3.0</version>
          </dependency>
+         <!-- https://mvnrepository.com/artifact/jstl/jstl -->
+        <dependency>   <!-- maven.jstl 에서 받아온 jstl사용 할 때 필요한것 -->
+         <groupId>jstl</groupId>
+         <artifactId>jstl</artifactId>
+       <version>1.2</version>
+       </dependency>       
     </dependencies>
 </project>
