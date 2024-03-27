@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*, jspBoard.dao.*, jspBoard.dto.BDto, java.text.SimpleDateFormat" %> <!-- *은 java.sql.에 있는 모든 클래스를 다 쓸 수 있다. -->
+<%@ page import="java.sql.*, jspBoard.service.*, jspBoard.dto.BDto, java.text.SimpleDateFormat" %> <!-- *은 java.sql.에 있는 모든 클래스를 다 쓸 수 있다. -->
 <%@ include file="inc/header.jsp" %>
 <%@ include file="inc/aside.jsp" %> 
 <% 
@@ -13,11 +13,12 @@
    String cpg = request.getParameter("cpg");
    if(cpg == null) cpg = "1";
    
-   DBConnect db = new DBConnect(); //db접속
-   Connection conn = db.getConnection();
-   JBoardDao dao = new JBoardDao(conn); //viewDB()메소드를 쓰기위해 dao 객체 생성
-   BDto dto = new BDto(); //viewDB 리턴 타입인 dto를 받기 위해 dto 객체 생성
-   BDto rs = dao.viewDB(id);
+
+   
+   DbWorks db = new DbWorks();
+   db.setId(id); //파라미터로 받아온 id로 DbWorks id를 세팅
+   BDto rs = db.getSelectOne();
+   
    
    Boolean addCook = true;
     //cid라는 쿠키이름을 생성하고 id값을 넣어준다.
@@ -31,7 +32,7 @@
     if(addCook){
       
       int addHit = rs.getHit() + 1;
-      dao.updateDB(rs.getId(), addHit, "hit");
+      db.getUpdate(addHit);
       //쿠키생성
       Cookie cookie = new Cookie("cid", id);
       cookie.setMaxAge(600); 
@@ -39,7 +40,7 @@
     }
     
     String wdate = sdf.format(rs.getWdate());
-    db.closeConnection();
+ 
 %>
 
 

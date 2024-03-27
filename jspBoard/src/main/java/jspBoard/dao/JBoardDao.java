@@ -50,7 +50,8 @@ public class JBoardDao {
           return rs;
       }
 	  
-	//전체 게시글 수 select 오버로드
+	  /*
+	  //전체 게시글 수 select 오버로드
 	  public int AllselectDB(String st, String txt) {
 		  int rs = 0;
           String sql = "select count(*) from jboard where " + st + " like ?";
@@ -76,6 +77,35 @@ public class JBoardDao {
 				  e.printStackTrace();
 			  }
 		  }
+          return rs;
+      }
+	  */
+	  
+	  public int AllselectDB(String st, String txt) {
+		  int rs = 0;
+          String sql = "select count(*) from jboard where " + st + " like ?";
+       
+          
+          try {
+        	 pstmt = conn.prepareStatement(sql);
+        	 pstmt.setString(1, "%"+txt+"%");
+        	 res = pstmt.executeQuery();    	 
+        	if(res.next()) {
+        		 rs = res.getInt(1); //rs = res.getInt("count(*)");
+        	}
+          } catch(SQLException e) {
+			  e.printStackTrace();
+		  }
+		  finally {
+			  try {
+				  if(res != null) res.close();
+				  if(pstmt != null) pstmt.close();
+				
+			  }
+			  catch(SQLException e) {
+				  e.printStackTrace();
+			  }
+		  } 
           return rs;
       }
 	  
@@ -155,7 +185,6 @@ public class JBoardDao {
 			  pstmt.setString(1, "%"+txt+"%");
 			  pstmt.setInt(2, limitPage); 
 			  pstmt.setInt(3, listCount);
-			  System.out.println(pstmt);
 			  res = pstmt.executeQuery();
 			//왜? 저렇게 while문을 돌면 마지막 값만 담기기에 이렇게 List에 담아줘서 모든 정보를 뽑아낼 수 있도록 하기위함.
 			  while(res.next()) { //preparedStatement의 내장메소드 ResultSet으로 값이 없을 때 까지 한행씩 읽어간다. 
@@ -274,7 +303,7 @@ public class JBoardDao {
 		  int num = 0;
 		  String sql ="insert into jboard (depth, title, content, writer, pass, userid) values (?, ?, ?, ?, ?, ?)";
 		  try {
-			  pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); //입력할 때 프라이머리키 값 반환하는 법(id값을 모를 때 써줘야 id값을 뽑아올 수 있다!!!)
+			  pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); //입력할 때 프라이머리키 값 반환하는 법(id값을 모를 때 써줘야 id값을 뽑아올 수 있다!!!) 중요함
 			                                       //지금 등록한 ID값에 대하여 받아오겠다!!
 			  pstmt.setInt(1, dto.getDepth());
 			  pstmt.setString(2, dto.getTitle());
@@ -288,7 +317,7 @@ public class JBoardDao {
 				  pstmt.setString(6, "GUEST");
 			  }
 			  pstmt.executeUpdate();
-			  res = pstmt.getGeneratedKeys(); //입력 후 auto increment 값을 반환 받음.
+			  res = pstmt.getGeneratedKeys(); //입력 후 auto increment 값을 반환 받음. num으로 이 값을 리턴했으니 num으로 해당글의 id값을 받아줄 수 있다.
 			  if(res.next()) {
 				  num = res.getInt(1);
 			  }
@@ -463,28 +492,25 @@ public class JBoardDao {
 	    
 	   
 	   //삭제
-	   public int deleteDB(String id, String pass) {
+	   public int deleteDB(String id) {
 	      int nid = Integer.parseInt(id);
 	      int result = 0;
-	      String sql = "delete from jboard where id=? and pass=?";
+	      String sql = "delete from jboard where id=?";
 	       BDto bDto = new BDto();
 	         try {
 	            pstmt = conn.prepareStatement(sql);
-	      pstmt.setInt(1, nid);
-	      pstmt.setString(2, pass);
-	      result = pstmt.executeUpdate();
-	      return result;
-	         
+	      pstmt.setInt(1, nid);   
+	      result = pstmt.executeUpdate();	    	         
 	   }catch (SQLException e) {
 	       e.printStackTrace();
 	    } finally {
 	        try {
 	            if(res != null) res.close();
 	            if(pstmt != null) pstmt.close();
-	         }catch(SQLException e) {e.printStackTrace();}   
-	      }
-	     
-	                
+	         }catch(SQLException e) {
+	        	 e.printStackTrace();
+	        }   
+	      }                     
 	      return result;
 	   }
 	  

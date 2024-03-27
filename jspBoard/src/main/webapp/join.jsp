@@ -39,7 +39,7 @@ function dPostcode() {
           <h1 class="text-center mb-5">회원가입</h1>
           <p class="text-center text-danger">* 표시가 되어 있는 부분은 필수 항목입니다.</p>
        
-                     <form name="registerForm" action= "joinok.jsp" id="registerform" class="registerform" method="post">
+                     <form name="registerForm" action= "insert" id="registerform" class="registerform" method="post">
                     <div class="row">
                         <div class="col-5 d-flex align-items-center mb-4">
                             <label for="username" class="text-right mr-3 col-4">이름*</label>
@@ -113,7 +113,7 @@ function dPostcode() {
                             <button class="btn btn-danger px-5 mx-2" type="reset">취소</button>
                             <button class="btn btn-primary px-5 mx-2" type="submit">전송</button>
                         </div>
-                        <input type="hidden" name="address" id="address" /> <!-- 나눠진값 이어주기 위한 hidden 타입 -->
+                        <input type="hidden" name="mode" value="join" />
                     </div>
                 </form>
        

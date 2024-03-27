@@ -8,7 +8,7 @@
          <section>
                 <div class="write">
                     <h2 class="text-center mt-4 mb-5 pb-4">글쓰기</h2>
-                    <form action="writeok.jsp" name="writeform" id="writeform" class="writeform row" method="post">
+                    <form action="insert" name="writeform" id="writeform" class="writeform row" method="post">
                         <!-- 게스트일 때만 적용 -->
                         <div class="col-12 row">
                             <div class="col-6 row form-group">
@@ -34,6 +34,7 @@
                             <a href="index.jsp" class="btn btn-danger px-5 mx-2">취소</a> <!--btn인 척 하는 a태그!!-->
                             <button class="btn btn-primary px-5 mx-2" type="submit">글쓰기</button>
                         </div>
+                        <input type="hidden" name="mode" value="write" />
                         <!-- 답글을 쓸 때 뿌려줘야 할 값들 -->
                         <input type="hidden" name="refid" value="" />
                         <input type="hidden" name="depth" value="" />

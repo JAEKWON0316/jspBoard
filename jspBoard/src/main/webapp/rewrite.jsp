@@ -14,7 +14,7 @@
          <section>
                 <div class="write">
                     <h2 class="text-center mt-4 mb-5 pb-4">답글쓰기</h2>
-                    <form action="rewriteok.jsp" name="writeform" id="writeform" class="writeform row" method="post">
+                    <form action="insert" name="writeform" id="writeform" class="writeform row" method="post">
                         <!-- 게스트일 때만 적용 -->
                         <div class="col-12 row">
                             <div class="col-6 row form-group">
@@ -46,6 +46,7 @@
                         <input type="hidden" name="depth" value="<%=depth %>" />
                         <input type="hidden" name="renum" value="<%=renum %>" />
                         <input type="hidden" name="cpg" value="<%=cpg %>" />
+                        <input type="hidden" name="mode" value="rewrite" />
                     </form>
                 </div>
         </section>
