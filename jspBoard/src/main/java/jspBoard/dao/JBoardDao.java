@@ -137,6 +137,7 @@ public class JBoardDao {
 			  int hit = res.getInt("hit");
 			  int chit = res.getInt("chit");
 			  Timestamp wdate = res.getTimestamp("wdate");
+			  String imnum = res.getString("imnum");
 			  
 			  BDto bDto = new BDto(); //BDto클래스 타입 bDto변수 객체 생성
 			  bDto.setId(id);
@@ -151,6 +152,7 @@ public class JBoardDao {
 			  bDto.setHit(hit);
 			  bDto.setChit(chit);
 			  bDto.setWdate(wdate);
+			  bDto.setImnum(imnum);
 			  
 			  dtos.add(bDto); //이렇게 while문을 돌면서 next()행에 값이 없을 떄 까지 dtos List에 값을 담아준다.
 			                  //List에 add메소드는 List에 값을 담아주는 내장 메소드.
@@ -200,6 +202,7 @@ public class JBoardDao {
 				  int hit = res.getInt("hit");
 				  int chit = res.getInt("chit");
 				  Timestamp wdate = res.getTimestamp("wdate");
+				  String imnum = res.getString("imnum");
 				  
 				  BDto bDto = new BDto(); //BDto클래스 타입 bDto변수 객체 생성
 				  bDto.setId(id);
@@ -214,6 +217,7 @@ public class JBoardDao {
 				  bDto.setHit(hit);
 				  bDto.setChit(chit);
 				  bDto.setWdate(wdate);
+				  bDto.setImnum(imnum);
 				  
 				  dtos.add(bDto); //이렇게 while문을 돌면서 next()행에 값이 없을 떄 까지 dtos List에 값을 담아준다.
 				                  //List에 add메소드는 List에 값을 담아주는 내장 메소드.
@@ -264,6 +268,7 @@ public class JBoardDao {
 				  int hit = res.getInt("hit");
 				  int chit = res.getInt("chit");
 				  Timestamp wdate = res.getTimestamp("wdate");
+				  String imnum = res.getString("imnum");
 				
 				  //BDto클래스 타입 bDto변수 객체 생성
 				  bDto.setId(id);   //bDto에 DB에서 가져온 값을 다시 세팅한다.
@@ -278,6 +283,7 @@ public class JBoardDao {
 				  bDto.setHit(hit);
 				  bDto.setChit(chit);
 				  bDto.setWdate(wdate);
+				  bDto.setImnum(imnum);
 			}
 			
 		} catch (SQLException e) {
@@ -301,7 +307,7 @@ public class JBoardDao {
 	  //쓰기
 	  public int insertDB(BDto dto) {
 		  int num = 0;
-		  String sql ="insert into jboard (depth, title, content, writer, pass, userid) values (?, ?, ?, ?, ?, ?)";
+		  String sql ="insert into jboard (depth, title, content, writer, pass, userid, imnum) values (?, ?, ?, ?, ?, ?, ?)";
 		  try {
 			  pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); //입력할 때 프라이머리키 값 반환하는 법(id값을 모를 때 써줘야 id값을 뽑아올 수 있다!!!) 중요함
 			                                       //지금 등록한 ID값에 대하여 받아오겠다!!
@@ -316,6 +322,7 @@ public class JBoardDao {
 			  else {
 				  pstmt.setString(6, "GUEST");
 			  }
+			  pstmt.setString(7, dto.getImnum());
 			  pstmt.executeUpdate();
 			  res = pstmt.getGeneratedKeys(); //입력 후 auto increment 값을 반환 받음. num으로 이 값을 리턴했으니 num으로 해당글의 id값을 받아줄 수 있다.
 			  if(res.next()) {

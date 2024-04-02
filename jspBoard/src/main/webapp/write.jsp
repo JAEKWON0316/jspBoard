@@ -25,7 +25,7 @@
                             <input type="text" name="title" id="title" class="form-control col-10" placeholder="제목" />
                         </div>
                         <div class="col-12">
-                            <textarea name="content" id="contents" class="form-control">
+                            <textarea name="content" id="content" class="form-control">
 
                             </textarea>
                         </div>
@@ -35,6 +35,7 @@
                             <button class="btn btn-primary px-5 mx-2" type="submit">글쓰기</button>
                         </div>
                         <input type="hidden" name="mode" value="write" />
+                        <input type="hidden" name="imnum" id="imnum"/>
                         <!-- 답글을 쓸 때 뿌려줘야 할 값들 -->
                         <input type="hidden" name="refid" value="" />
                         <input type="hidden" name="depth" value="" />
