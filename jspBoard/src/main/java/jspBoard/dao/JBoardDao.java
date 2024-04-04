@@ -22,6 +22,8 @@ public class JBoardDao {
 		  this.conn = conn; //위에 만들어놓은 conn에 값을 넣어주는것 JBoardDao dao = new JBoardDao(conn); 를하면 바로 연결가능 생성자를 통해
 	  }
 	  
+	  JBoardImgDao idao = new JBoardImgDao(conn);
+	  
 	  //전체 게시글 수 select
 	  public int AllselectDB() {
 		  int rs = 0;
@@ -306,6 +308,7 @@ public class JBoardDao {
 	  }
 	  //쓰기
 	  public int insertDB(BDto dto) {
+		  JBoardImgDao idao = new JBoardImgDao(conn);
 		  int num = 0;
 		  String sql ="insert into jboard (depth, title, content, writer, pass, userid, imnum) values (?, ?, ?, ?, ?, ?, ?)";
 		  try {
@@ -327,6 +330,7 @@ public class JBoardDao {
 			  res = pstmt.getGeneratedKeys(); //입력 후 auto increment 값을 반환 받음. num으로 이 값을 리턴했으니 num으로 해당글의 id값을 받아줄 수 있다.
 			  if(res.next()) {
 				  num = res.getInt(1);
+				  idao.updateDB(num, dto.getImnum()); // num은 jboard의 pk값 그리고 dto.getImnum은 jboard_img에서 받아온 imnum값
 			  }
 			  
 			  if(dto.getDepth() == 0 ) {

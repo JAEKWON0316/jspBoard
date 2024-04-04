@@ -36,10 +36,10 @@ public class UploadServlet extends HttpServlet {
        String nFileName = null;
        Long fileSize = 0L;
        String ext = null;
-       String imnum = Long.toString(System.currentTimeMillis());
+       String imnum = Long.toString(System.currentTimeMillis()); //처음 imnum이 생김 유닉스타임코드(밀리세컨드로생김)
 
        HttpSession session = request.getSession();
-       String userid = (String) session.getAttribute("userid");
+       String userid = (String) session.getAttribute("userid"); //회원정보는 session에서 받도록
 
        ServletContext context = getServletContext();
        String realPath = context.getRealPath("/uploads");
@@ -51,7 +51,7 @@ public class UploadServlet extends HttpServlet {
            List<FileItem> items = upload.parseRequest(request);
 
            for (FileItem item : items) {
-               if (item.isFormField()) {
+               if (item.isFormField()) { //true이면 text타입 false이면 binary타입
                    // 폼 필드 처리
                    String fieldName = item.getFieldName();
                    String fieldValue = item.getString();
@@ -92,12 +92,14 @@ public class UploadServlet extends HttpServlet {
 
            String rs = idao.insertDB(idto);
            String url = "uploads/" + nFileName;
-           String json = "{\"url\": \"" + url + "\", \"imnum\":\"" + rs + "\"}"; //json 타입 {"키", "값" , .. }
+           String json = "{\"url\": \"" + url + "\", \"imnum\":\"" + rs + "\"}"; //json타입 {키,값} 쌍 imnum리턴해줌
 
            response.setContentType("application/json");
            response.setCharacterEncoding("UTF-8");
            response.getWriter().write(json);
+           
        } catch (Exception e) {
+    	   
            throw new ServletException(e);
        }
    }

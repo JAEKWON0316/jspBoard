@@ -54,8 +54,9 @@ public class InsertServlet extends HttpServlet {
 				   }  
 				   dto.setDepth(Integer.parseInt(req.getParameter("depth"))+1);
 				   dto.setRenum(Integer.parseInt(req.getParameter("renum")));
+				   dto.setImnum(req.getParameter("imnum"));
 				   result = dao.insertDB(dto);
-				   txt = "답글을 썼습니다.";
+				   txt = "답변글을 썼습니다.";
 				   link = "contents.jsp?id="+result+"&cpg=1";
 				   
 			}
@@ -78,6 +79,7 @@ public class InsertServlet extends HttpServlet {
 				dto.setPass(req.getParameter("pass"));
 				dto.setTitle(req.getParameter("title"));
 				dto.setContent(req.getParameter("content"));
+				 dto.setImnum(req.getParameter("imnum"));
 				dto.setDepth(0);
 				dto.setUserid(userid);
 				result = dao.insertDB(dto);

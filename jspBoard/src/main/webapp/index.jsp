@@ -11,6 +11,14 @@
           HttpSession sess = request.getSession(true);
           String st = request.getParameter("searchname"); //검색엔진 sname
           String txt = request.getParameter("txt"); //검색엔진 svalue
+          ServletContext cont = getServletContext();
+          
+          try{
+        	TrashFile trashfile = new TrashFile(cont);  
+          }
+          catch(Exception e){
+        	  e.printStackTrace();
+          }
                 
           /* 페이징 변수들 */
           int pg; //받아올 현재 페이지 번호
@@ -115,12 +123,16 @@
                                 	   String reicon = "<i class=\"ri-corner-down-right-line\"></i>";
                                 	   styleDepth = "<span style='display:inline-block;width:" + padding + "'></span>"+reicon+" ";
                                    }
+                                   String commentHit = "";
+                                   if(chit > 0){
+                                	   commentHit = " ("+chit+")";
+                                   }
                             %>
                             <tr>
                                 <td class="text-center"><%=num %></td>
                                 <% if(sess.getAttribute("mid") != null){ %>      
                                 <td><a href="contents.jsp?id=<%=id%>&cpg=<%=pg%>"> <!--  contents로 id와 cpg가 같이 가도록 -->
-                                      <%=styleDepth%><%=title %>
+                                      <%=styleDepth%><%=title %><%=commentHit %>
                                     </a><span></span>
                                     <!-- 
                                     <i class="ri-file-image-fill"></i>
@@ -130,7 +142,7 @@
                                 </td>
                                 <% }else{ %>                              
                                 <td>
-                               <a href="javascript:void(0)"><%=styleDepth%><%=title %>
+                               <a href="javascript:void(0)"><%=styleDepth%><%=title %><%=commentHit %>
                                </a><span></span>
                                     <!-- 
                                <i class="ri-file-image-fill"></i>

@@ -6,11 +6,11 @@ $(function(){
        lang: 'ko-KR',
        callbacks: {
          onImageUpload: function(files){
-            sendData(files[0]);
+            sendData(files[0]);   //files배열의 1번째것
          },
          onMediaDelete: function(files){
-             delData(files[0]);
-         }
+            delData(files[0]);
+         }   
        }
    });
    
@@ -26,9 +26,9 @@ $(function(){
          contentType: false,
          processData: false,
          success: function( data ) {
-         console.log(data);
-            $("#content").summernote("insertImage", data.url);
-            $("#imnum").val(data.imnum);
+            console.log(data);
+            $("#content").summernote("insertImage", data.url);  //이미지파일의 url 보낸다
+            $("#imnum").val(data.imnum);   //이미지 임시넘버 보낸다
          },
          error: function(jqXHR, textStatus, errorThrown){
             console.error(textStatus + ", " + errorThrown);
@@ -37,23 +37,24 @@ $(function(){
       });
    }
    
-   function delData(file){
-       const fileUrl = file.src; //삭제될 이미지의 url
-       $.ajax({
-           url: 'delete',
-           type: 'post',
-           data: {"fileUrl" : fileUrl },
-           success: function(data) {
-               if(data){
-               console.log("파일삭제");
-               }else{
-               console.log("파일삭제 실패");
-               }
-           },
-           error: function(jqXHR, textStatus, errorThrown){
-               console.log("삭제실패");
-           }
-       });
+   
+   function delData(file) {
+      const fileUrl = file.src; //delete 될 image 의 url
+      $.ajax({
+         url: 'delete',
+         type: 'post',
+         data: { "fileUrl" : fileUrl },
+         success: function(data) {
+           if(data){
+             console.log("파일삭제");
+           }else{
+             console.log("파일삭제 실패");
+           } 
+         },
+         error: function(jqXHR, textStatus, errorThrown){
+           console.log("삭제실패");   
+         }
+      });
    }
    
 });
