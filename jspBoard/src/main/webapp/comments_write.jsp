@@ -1,25 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
    
-       <link rel="stylesheet" href="css/summernote-bs4.css">
-         <script src="js/summernote-bs4.js"></script>
-         <script>
-            $(function(){
-               $("#comment").summernote({
-                  width:'85%',
-                  height:'100px',
-                  toolbar: [
-                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                    ['font', ['strikethrouth','superscript', 'subscript']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']]
-                  ] 
-               });
-            }); 
 
-         </script>
          
-               <li class="bg-light list-group-item flex-column p-5 mb-5 align-items-start">
+               <li class="bg-light list-group-item flex-column p-5 mb-5 align-items-start position-relative">
                   <form name="commentForm" id="commentForm" class="d-flex" method="post" action="./insertcomment">
                      <div class="form-box">
                      <div class="mb-2">

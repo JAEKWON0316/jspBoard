@@ -20,7 +20,12 @@ $(function(){
              return false;
          }
     });  
-
+    
+        //코멘트 버튼 보이기
+     $(".comments .btn-box").click(function(){
+      $(this).find('.edel').toggle();
+     }); 
+    
 }); //jquery
 
 function dPostcode() {

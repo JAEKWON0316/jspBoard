@@ -13,6 +13,7 @@
         DbWorks db = new DbWorks();
         db.setId(id);
         BDto rs = db.getSelectOne();
+        
 %>
          <section>
                 <div class="write">
@@ -34,7 +35,7 @@
                             <input type="text" name="title" id="title" class="form-control col-10" placeholder="제목" value="<%=rs.getTitle() %>" />
                         </div>
                         <div class="col-12">
-                            <textarea name="content" id="contents" class="form-control"> <%=rs.getContent() %>
+                            <textarea name="content" id="content" class="form-control"> <%=rs.getContent() %>
 
                             </textarea>
                         </div>

@@ -9,7 +9,8 @@
 <%   
    HttpSession sess2 = request.getSession(true);
    Cookie[] cooks2 = request.getCookies(); //웹브라우저에 저장된 모든 쿠키를 받는다.   
-
+   
+   String userid = (String) sess2.getAttribute("userid");
    String id = request.getParameter("id"); 
    String cpg = request.getParameter("cpg");
    if(cpg == null) cpg = "1";
@@ -65,15 +66,100 @@
              <a href="./?cpg=<%=cpg %>" class="btn btn-primary mr-3">목록</a>
              <a href="rewrite.jsp?id=<%=id %>&refid=<%=rs.getRefid() %>&depth=<%=rs.getDepth() %>&renum=<%=rs.getRenum() %>&cpg=<%=cpg %>" class="btn btn-primary">답글쓰기</a>
              <a href="pass.jsp?id=<%=id %>&mode=edit" class="btn btn-primary">수정</a>  <!-- 매개변수로 2개를 보내주는 방법(getter) -->
-             <a href="pass.jsp?id=<%=id %>&mode=del" class="btn btn-danger">삭제</a>                      
+             <a href="pass.jsp?id=<%=id %>&mode=del" class="btn btn-danger">삭제</a>                            
           </div>
           
-       </div>
-       
+       </div>             
+         <script src="js/summernote-bs4.js"></script>
+         <script>
+            $(function(){
+               $("#comment").summernote({
+            	//$(document).on("summernote", "#comment", function(){
+                  width:'85%',
+                  height:'100px',
+                  toolbar: [
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrouth','superscript', 'subscript']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']]
+                  ] 
+               });
+            }); 
+
+         </script>
        <ul class="list-group list-group-flush comments">
           <%@ include file="comments_list.jsp" %>
           <%@ include file="comments_write.jsp" %>          
        </ul>
     </section>        
+    <script>
+    $(function(){
+        $(".cdel").click(function(e){
+           e.preventDefault();
+           const $userid = $(this).data("userid");
+           if($userid == "<%=userid %>" || "<%=userid%>" == "admin"){
+              if(confirm("정말로 삭제하시겠습니까?")){
+                 const $link = $(this).attr("href");
+                 location.href=$link+"&userid="+$userid;
+              }   
+           }else{
+              alert("삭제할 권한이 없습니다.");
+              return;
+           }
+        });
+        $(".cedit").click(function(e){
+          e.preventDefault();
+          let $userid, $num, username, comment, id, $form;
+          
+          $userid = $(this).data("userid");
+          $num = $(".cedit").index(this);      
+          username = $('.cusername').eq($num).text();
+          comment = $('.ccomment').eq($num).html();      
+          id = $(".cid").eq($num).val();
+                
+          $form = '<form name="commentForm" id="commentform'+$num+'"'+
+                  'class="d-flex w-100 bg-white" method="post" action="./updatecomment">'+
+                  '<div class="form-box">'+
+                  '<div class="mb-2">'+
+                  '<label>이름 : </label>'+
+                  '<input type="text" name="username"'+
+                  'value="'+username+'">'+
+                  '</div>'+
+                  '<div class="d-flex">'+
+                  '<textarea name="comment" class="c_comment">'+comment+'</textarea>'+
+                  '<button type="submit" class="comment-btn">댓글수정</button>'+
+                  '</div></div>'+    
+                  '<input type="hidden" name="id" value="'+id+'"></form>';
+
+              
+          
+          if($userid == "<%=userid %>" || "<%=userid%>" == "admin"){
+        	 let contDiv = $("#commentform"+$num);
+        	 //console.dir(contDiv);
+        	 if(contDiv.length > 0){   //클리하면 나오는 form 토글작업을 하기위한 if문
+        		 contDiv.remove();
+        	 }
+        	 else{
+             //$('.editform').eq($num).html($form);
+             $(".editform").eq($num).append($form); //editform을 유지하고 그 뒤에 $form을 붙힌다. -> if문을 이용하기 위함. 
+             $('.c_comment').summernote({
+                 width:'85%',
+                 height:'100px',
+                 toolbar: [
+                   ['style', ['bold', 'italic', 'underline', 'clear']],
+                   ['font', ['strikethrouth','superscript', 'subscript']],
+                   ['color', ['color']],
+                   ['para', ['ul', 'ol', 'paragraph']]
+                 ]              
+             });
+        	}
+          }else{
+                alert("수정할 권한이 없습니다.");
+                return;
+            }
+          
+        });
+     });
+    </script>
 
 <%@ include file="inc/footer.jsp" %>  
